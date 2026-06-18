@@ -1,19 +1,34 @@
-import Tarea from "../Tarea/Tarea.tsx"
+import TareaItem from '../Tarea/Tarea.tsx';
+import type { Tarea } from '../TodoApp/TodoApp.tsx';
 
 type ListaTareas = {
-    listaTareas: string[]
-    borrarTarea: (index: number) => void
+    listaTareas: Tarea[];
+    borrarTarea: (id: string) => void;
+    alternarTarea: (id: string) => void;
 }
 
-const ListaTareas = ({ listaTareas, borrarTarea }: ListaTareas) => {
+const ListaTareas = ({ listaTareas, borrarTarea, alternarTarea }: ListaTareas) => {
+    if (listaTareas.length === 0) {
+        return (
+            <div className="empty-state">
+                <strong>No hay tareas para mostrar</strong>
+                <span>Agrega una nueva tarea o cambia el filtro activo.</span>
+            </div>
+        );
+    }
+
     return (
-        <div className="taskList">
-            {listaTareas.map((tarea, index) => (
-                <Tarea key={index} tarea={tarea} borrarTarea={() => borrarTarea(index)}></Tarea>
-            )
-            )}
-        </div>
-    )
+        <ul className="task-list">
+            {listaTareas.map((tarea) => (
+                <TareaItem
+                    key={tarea.id}
+                    tarea={tarea}
+                    borrarTarea={() => borrarTarea(tarea.id)}
+                    alternarTarea={() => alternarTarea(tarea.id)}
+                />
+            ))}
+        </ul>
+    );
 }
 
 export default ListaTareas;
